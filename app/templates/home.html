@@ -1,7 +1,25 @@
-{% extends 'layout.html' %}
+{% extends 'base.html' %}
 
-{% block content %}
-	<div class="home">
-	    <h2>My homepage</h2>    	
+{% block app_content %}
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12 row-headers">
+				<div class="text-center">
+					<h1>Super Geocoder</h1>
+		    		<h4>Please upload your CSV file. The values containing addresses should be in a column named address or Address</h4>					
+				</div>					
+			</div>	
+		</div>
+		<div class="row">
+			<div class="col-md-6 col-md-offset-4">
+				<form class="form-inline" action='' method='POST' enctype="multipart/form-data">
+					{{ form.csrf_token }}
+					<div class="form-group">
+						{{ form.data() }}						
+					</div>
+					{{ form.submit(class="btn btn-primary") }}					
+				</form>
+			</div>
+		</div>
 	</div>
 {% endblock %}
