@@ -31,6 +31,7 @@ def create_pandas_df(file):
 	df['Coordinates'] = df[address_column].apply(get_geo_data)
 	df['Latitude'] = df['Coordinates'].apply(lambda x: x.latitude if x != None else None)			
 	df['Longitude'] = df['Coordinates'].apply(lambda x: x.longitude if x != None else None)
+	df = df.drop('Coordinates', 1)
 
 	return df
 
