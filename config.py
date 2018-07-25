@@ -7,3 +7,4 @@ load_dotenv(os.path.join(basedir, '.env'))
 class Config:
 	SECRET_KEY = os.environ.get('SECRET_KEY')
 	DEBUG = True if os.environ.get('DEBUG') == '1' else False
+	UPLOAD_FOLDER = 'upload'
