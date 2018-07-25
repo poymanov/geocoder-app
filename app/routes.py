@@ -1,5 +1,5 @@
 from flask import render_template, redirect, request, url_for, send_file
-from app import app, allowed_file, create_pandas_df, get_pandas_df
+from app import app, allowed_file, create_pandas_df, get_pandas_df, get_upload_path
 from app.forms import UploadForm
 from werkzeug import secure_filename
 import os
@@ -24,7 +24,12 @@ def process():
 				form.upload_file.errors.append("Your file is missing a column 'Address' or 'address'")
 				return render_template('home.html', form=form)		
 			else:
-				df.to_csv(os.path.join(app.config['UPLOAD_FOLDER'], filename), encoding='utf-8', index=False)
+
+				upload_directory = get_upload_path()
+				if not os.path.exists(upload_directory):
+					os.makedirs(upload_directory)
+
+				df.to_csv(os.path.join(upload_directory, filename), encoding='utf-8', index=False)
 				return redirect(url_for('result', filename=filename))
 		else:
 			form.upload_file.errors.append("You must upload only .csv files")
@@ -35,14 +40,14 @@ def process():
 
 @app.route('/result/<filename>')
 def result(filename):
-	path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+	path = os.path.join(get_upload_path(), filename)
 
 	df = get_pandas_df(path)
 	return render_template('result.html', df=df, filename=filename, path=path)
 
 @app.route("/download/<filename>")
 def download(filename):
-	upload_path = os.path.abspath(os.path.dirname(os.path.dirname(__file__))) + '/' + app.config['UPLOAD_FOLDER']
+	upload_path = get_upload_path()
 	path = os.path.join(upload_path, filename)
 
 	new_filename = "modified_%s.csv" % filename

@@ -3,6 +3,7 @@ from flask_bootstrap import Bootstrap
 from config import Config
 from geopy.geocoders import Nominatim
 import pandas
+import os
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -35,5 +36,11 @@ def create_pandas_df(file):
 
 def get_pandas_df(file):
 	return pandas.read_csv(file)	
+
+def get_root_project_dir():
+	return os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+
+def get_upload_path():
+	return os.path.join(get_root_project_dir(), app.config['UPLOAD_FOLDER'])
 
 from app import routes, forms
