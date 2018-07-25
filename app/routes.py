@@ -1,4 +1,4 @@
-from flask import render_template, redirect, request, url_for
+from flask import render_template, redirect, request, url_for, send_file
 from app import app, allowed_file, create_pandas_df, get_pandas_df
 from app.forms import UploadForm
 from werkzeug import secure_filename
@@ -36,5 +36,14 @@ def process():
 @app.route('/result/<filename>')
 def result(filename):
 	path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+
 	df = get_pandas_df(path)
-	return render_template('result.html', df=df)
+	return render_template('result.html', df=df, filename=filename, path=path)
+
+@app.route("/download/<filename>")
+def download(filename):
+	upload_path = os.path.abspath(os.path.dirname(os.path.dirname(__file__))) + '/' + app.config['UPLOAD_FOLDER']
+	path = os.path.join(upload_path, filename)
+
+	new_filename = "modified_%s.csv" % filename
+	return send_file(path, attachment_filename=new_filename, as_attachment=True)	
