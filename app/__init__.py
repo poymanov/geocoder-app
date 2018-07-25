@@ -18,7 +18,7 @@ def get_geo_data(address):
 	return nom.geocode(address)
 	
 def create_pandas_df(file):
-	df = pandas.read_csv(file)
+	df = get_pandas_df(file)
 
 	if 'Address' in df.columns:
 		address_column = 'Address'
@@ -32,5 +32,8 @@ def create_pandas_df(file):
 	df['Longitude'] = df['Coordinates'].apply(lambda x: x.longitude if x != None else None)
 
 	return df
+
+def get_pandas_df(file):
+	return pandas.read_csv(file)	
 
 from app import routes, forms
