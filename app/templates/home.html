@@ -15,17 +15,18 @@
 				<form class="form-inline" action="{{ url_for('process') }}" method="POST" enctype="multipart/form-data">
 					{{ form.csrf_token }}
 					<div class="form-group">
-						{{ form.upload_file() }}		
-
+						{{ form.upload_file() }}											
+					</div>
+					{{ form.submit(class="btn btn-primary") }}					
+					<div class="form-group">						
 						{% if form.errors.upload_file %}
 							<ul class="text-danger">							
 							    {% for error in form.errors.upload_file %}
 							    	<li>{{ error }}</li>
 							    {% endfor %}
 							</ul>
-						{% endif %}										
-					</div>
-					{{ form.submit(class="btn btn-primary") }}					
+						{% endif %}	
+					</div>	
 				</form>
 			</div>
 		</div>
